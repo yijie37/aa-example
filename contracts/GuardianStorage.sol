@@ -78,8 +78,8 @@ library GuardianStorage {
     // record of voter
     uint nullifier = input[2];
 
-    if(l.socialRecoveryVerifier.verifyProof(a, b, c, input)) {
-      if(!l.recover_nullifier_set[nullifier]) {
+    if(!l.recover_nullifier_set[nullifier]) {
+      if(l.socialRecoveryVerifier.verifyProof(a, b, c, input)) {
         l.cur_vote += 1;
 
         if(l.cur_vote >= l.vote_threshold) {
