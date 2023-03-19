@@ -32,8 +32,6 @@ contract SimpleAccount is BaseAccount, UUPSUpgradeable, Initializable {
 
     IEntryPoint private immutable _entryPoint;
 
-    GuardianStorage.Layout private guardianLayout;
-
     event SimpleAccountInitialized(IEntryPoint indexed entryPoint, address indexed owner);
 
     modifier onlyOwner() {
@@ -160,7 +158,7 @@ contract SimpleAccount is BaseAccount, UUPSUpgradeable, Initializable {
       IUpdateGuardianVerifier updateGuardianVerifier, 
       ISocialRecoveryVerifier socialRecoveryVerifier
     ) external {
-      guardianLayout.initialize(
+      GuardianStorage.layout().initialize(
         guardians,
         vote_threshold,
         updateGuardianVerifier, 
@@ -174,7 +172,7 @@ contract SimpleAccount is BaseAccount, UUPSUpgradeable, Initializable {
       uint[2] memory c, 
       uint[6] memory input
     ) external returns (bool) {
-      return guardianLayout.updateGuardian(a, b, c, input);
+      return GuardianStorage.layout().updateGuardian(a, b, c, input);
     }
 
     function recover(
@@ -184,7 +182,7 @@ contract SimpleAccount is BaseAccount, UUPSUpgradeable, Initializable {
       uint[2] memory c, 
       uint[3] memory input 
     ) external returns (bool valid, bool update) {
-      (valid, update) = guardianLayout.recover(a, b, c, input);
+      (valid, update) = GuardianStorage.layout().recover(a, b, c, input);
       if(valid && update) {
         owner = newOwner;
       }
